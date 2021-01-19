@@ -23,6 +23,7 @@ def handleRequest(update, context):
 	logger.debug(f'Chat {update.effective_chat.id}: got a request for the url {url}')
 	update.message.reply_text("Processing ...")
 	
+	url = url.replace('/view/', '/iiif/') + '/manifest.json'
 	r = requests.get(url)
 	if not r.ok:
 		logger.info(f'Chat {update.effective_chat.id}: url {url} returned HTTP {r.status_code}')
@@ -74,6 +75,9 @@ def cancel(update, context):
 	return ConversationHandler.END
 
 if __name__ == '__main__':
+	# See https://stackoverflow.com/questions/38015537/python-requests-exceptions-sslerror-dh-key-too-small
+	requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
+	
 	logger = logging.getLogger(__name__)
 	logger.setLevel(logging.DEBUG)
 	handler = logging.handlers.RotatingFileHandler(LOG_FILE, maxBytes=1000*1000*1, backupCount=5)
