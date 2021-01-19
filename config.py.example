@@ -1,0 +1,4 @@
+TOKEN = 'Your token'
+LOG_FILE = './milo.log'
+SHARED_PATH = 'mysharedpath'
+SHARED_URL = 'mysharedurl'
