@@ -71,7 +71,12 @@ def handleRequest(update, context):
 	update.message.reply_text(f'Converting to PDF ...')
 	
 	if len(images) > 0:
-		os.spawnl(os.P_WAIT, '/usr/bin/convert', ['/usr/bin/convert', *images, f'output/{title}/{title}.pdf'])
+		os.spawnve(
+			os.P_WAIT,
+			'/usr/bin/convert',
+			['/usr/bin/convert', '-limit memory 3GiB -limit map 3GiB -limit area 3GiB', *images, f'output/{title}/{title}.pdf'],
+			{'MAGICK_TMPDIR': MAGIC_TMPDIR}
+		)
 	
 	os.rename(f'output/{title}/{title}.pdf', f'{SHARED_PATH}/{title}.pdf')
 	update.message.reply_text(f'{SHARED_URL}/{title}.pdf')
