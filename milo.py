@@ -24,7 +24,13 @@ def handleRequest(update, context):
 	update.message.reply_text("Processing ...")
 	
 	url = url.replace('/view/', '/iiif/') + '/manifest.json'
-	r = requests.get(url)
+	try:
+		r = requests.get(url)
+	except Exception as e:
+		logger.info(f'Chat {update.effective_chat.id}: url {url} malformed')
+		update.message.reply_text('An error occurred while trying to download the required manuscript. Url malformed')
+		return ConversationHandler.END
+	
 	if not r.ok:
 		logger.info(f'Chat {update.effective_chat.id}: url {url} returned HTTP {r.status_code}')
 		update.message.reply_text('An error occurred while trying to download the required manuscript')
