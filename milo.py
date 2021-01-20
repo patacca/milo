@@ -74,7 +74,7 @@ def handleRequest(update, context):
 		os.spawnve(
 			os.P_WAIT,
 			'/usr/bin/convert',
-			['/usr/bin/convert', '-limit memory 3GiB -limit map 3GiB -limit area 3GiB', *images, f'output/{title}/{title}.pdf'],
+			['/usr/bin/convert', '-limit', 'memory', '3GiB', '-limit', 'map', '3GiB', '-limit', 'area', '3GiB', *images, f'output/{title}/{title}.pdf'],
 			{'MAGICK_TMPDIR': MAGICK_TMPDIR}
 		)
 	
