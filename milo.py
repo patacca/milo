@@ -62,13 +62,16 @@ def handleRequest(update, context):
 		f.write(r.content)
 		f.close()
 		
-		images.append(Image.open(f'output/{title}/{count}.jpg'))
-		images[-1].convert('RGB')
+		# ~ images.append(Image.open(f'output/{title}/{count}.jpg'))
+		# ~ images[-1].convert('RGB')
+		images.append(f'output/{title}/{count}.jpg')
 		
 		count += 1
 	
+	update.message.reply_text(f'Converting to PDF ...')
+	
 	if len(images) > 0:
-		images[0].save(f'output/{title}/{title}.pdf', save_all=True, append_images=images[1:])
+		os.spawnl(os.P_WAIT, '/usr/bin/convert', ['/usr/bin/convert', *images, f'output/{title}/{title}.pdf'])
 	
 	os.rename(f'output/{title}/{title}.pdf', f'{SHARED_PATH}/{title}.pdf')
 	update.message.reply_text(f'{SHARED_URL}/{title}.pdf')
