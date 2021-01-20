@@ -4,7 +4,7 @@ import json, requests, sys, os, logging
 from PIL import Image
 from telegram.ext import Updater, CommandHandler, ConversationHandler, MessageHandler, Filters
 
-from config import TOKEN, LOG_FILE, SHARED_PATH, SHARED_URL
+from config import TOKEN, LOG_FILE, SHARED_PATH, SHARED_URL, MAGICK_TMPDIR
 
 REQUEST_STATE = 0
 
@@ -75,7 +75,7 @@ def handleRequest(update, context):
 			os.P_WAIT,
 			'/usr/bin/convert',
 			['/usr/bin/convert', '-limit memory 3GiB -limit map 3GiB -limit area 3GiB', *images, f'output/{title}/{title}.pdf'],
-			{'MAGICK_TMPDIR': MAGIC_TMPDIR}
+			{'MAGICK_TMPDIR': MAGICK_TMPDIR}
 		)
 	
 	os.rename(f'output/{title}/{title}.pdf', f'{SHARED_PATH}/{title}.pdf')
